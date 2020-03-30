@@ -49,7 +49,6 @@ public class MovieController {
 		Movie movie = this.serviceMovie.find(id);		
 		if(movie == null)
 		{
-			//return new ResponseEntity<> ("{\"error\":\"Not found\"}", HttpStatus.NOT_FOUND);
 			throw new NotFoundException("No se ha encontrado una película con el Id ".concat(id.toString()));
 		}
 		
