@@ -5,6 +5,8 @@ import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.com.jorgdz.app.entity.Movie;
@@ -62,8 +65,15 @@ public class MovieController {
 		return new ResponseEntity<> (movies, HttpStatus.FOUND);
 	}
 	
+	@GetMapping(value = "/movies/date", produces = "application/json")
+	public ResponseEntity<?> getAllByDateParam (@RequestParam(name = "date") Date date)
+	{
+		Collection<Movie> movies = this.serviceMovie.findByDate(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());		
+		return new ResponseEntity<> (movies, HttpStatus.FOUND);
+	}
+	
 	@PostMapping(value = "/movie", produces = "application/json")
-	public ResponseEntity<?> save (@RequestBody Movie movie)
+	public ResponseEntity<?> save (@Valid @RequestBody Movie movie)
 	{
 		Movie movieAdd = this.serviceMovie.add(movie);
 		return new ResponseEntity<>(movieAdd, HttpStatus.CREATED);

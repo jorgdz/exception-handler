@@ -27,7 +27,7 @@ public class MovieServiceImpl implements MovieService{
 	{
 		Collection<Movie> addMovies = Arrays.asList(new Movie(1L, "F&F9", this.help.getDate("2020-03-20"), 20.0),
 				new Movie(2L, "It2", this.help.getDate("2019-10-14"), 3.5),
-				new Movie(3L, "Dr. Dolittle", this.help.getDate("2019-10-14"), 5),
+				new Movie(3L, "Dr. Dolittle", this.help.getDate("2019-10-14"), 5.0),
 				new Movie(4L, "Avengers End Game", this.help.getDate("2019-04-13"), 4.0));
 		
 		this.movies.addAll(addMovies);

@@ -1,11 +1,17 @@
 package com.github.com.jorgdz.app.exceptions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -69,6 +75,24 @@ public class HandlerException {
         			exception, request.getRequestURI());
 		}
         
+    	if(exception instanceof MethodArgumentNotValidException)
+    	{
+    		BindingResult bindingResult = ((MethodArgumentNotValidException) exception).getBindingResult();
+    		
+    		List<FieldError> errors = bindingResult.getFieldErrors();
+    		List<String> listErrors = new ArrayList<String>();
+    		
+    		errors.forEach(e -> listErrors.add(e.getDefaultMessage()));
+  
+    		return new Error(listErrors, exception, request.getRequestURI());
+    	}
+    	
+    	if(exception instanceof HttpMessageNotReadableException)
+    	{
+    		HttpMessageNotReadableException ex = (HttpMessageNotReadableException) exception;
+    		return new Error(ex.getMostSpecificCause().getLocalizedMessage(), exception, request.getRequestURI());
+    	}
+    	
     	return new Error(exception, request.getRequestURI());
     }
     

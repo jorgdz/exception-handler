@@ -3,19 +3,37 @@ package com.github.com.jorgdz.app.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Movie implements Serializable{
 	
 	private static final long serialVersionUID = -1888379301644016676L;
 
 	private Long id;
 	
+	@Size(min = 3, max = 20, message = "El nombre debe ser mayor a 3 y menor a 20 caracteres.")
+	@NotEmpty(message = "El campo nombre no puede estar vacío")
 	private String name;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@PastOrPresent(message = "La fecha debe ser menor o igual a la actual")
+	@NotNull(message = "La fecha no puede ser nula")
 	private LocalDate date;
 	
-	private double price;
+	@NotNull(message = "El precio no debe ser nulo")
+	@Min(value = 0, message = "El precio debe ser mayor a 0")
+	private Double price;
 
-	public Movie(Long id, String name, LocalDate date, double price) {
+	public Movie(Long id, String name, LocalDate date, Double price) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -49,11 +67,11 @@ public class Movie implements Serializable{
 		this.date = date;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	

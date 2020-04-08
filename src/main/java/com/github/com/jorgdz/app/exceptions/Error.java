@@ -1,5 +1,7 @@
 package com.github.com.jorgdz.app.exceptions;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -12,6 +14,8 @@ public class Error {
 	
 	private String uri;
 	
+	private List<String> errors;
+	
 	public Error (Exception ex, String uri)
 	{
 		this.message = ex.getMessage();
@@ -22,6 +26,13 @@ public class Error {
 	public Error (String message, Exception ex, String uri)
 	{
 		this.message = message;
+		this.exception = ex.getClass().getSimpleName();
+		this.uri = uri;
+	}
+	
+	public Error(List<String> errors, Exception ex, String uri) 
+	{
+		this.errors = errors;
 		this.exception = ex.getClass().getSimpleName();
 		this.uri = uri;
 	}
@@ -49,10 +60,19 @@ public class Error {
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
+	
+	public List<String> getErrors() {
+		return errors;
+	}
+
+	public void setErrors(List<String> errors) {
+		this.errors = errors;
+	}
 
 	@Override
 	public String toString() {
-		return "Error [message=" + message + ", exception=" + exception + ", uri=" + uri + "]";
+		return "Error [message=" + message + ", exception=" + exception + ", uri=" + uri + ", errors="
+				+ errors + "]";
 	}
-	
+
 }
